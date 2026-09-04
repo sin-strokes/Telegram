@@ -1822,11 +1822,11 @@ public class ChannelMonetizationLayout extends SizeNotifierFrameLayout implement
                         MessagesController.getInstance(currentAccount).putChats(r.chats, false);
                         tonTransactions.addAll(r.history);
                         tonTransactionsLastOffset = r.next_offset;
-                        loadingTransactions[type] = false;
                         updateLists(true, true);
                     } else if (err != null) {
                         BulletinFactory.showError(err);
                     }
+                    loadingTransactions[type] = false;
                     if (hasTransactions() != hadTransactions && updateParentList != null) {
                         updateParentList.run();
                     }
@@ -1850,11 +1850,11 @@ public class ChannelMonetizationLayout extends SizeNotifierFrameLayout implement
                         MessagesController.getInstance(currentAccount).putChats(r.chats, false);
                         starsTransactions.addAll(r.history);
                         starsLastOffset = r.next_offset;
-                        loadingTransactions[type] = false;
                         updateLists(true, true);
                     } else if (err != null) {
                         BulletinFactory.showError(err);
                     }
+                    loadingTransactions[type] = false;
                     if (hasTransactions() != hadTransactions && updateParentList != null) {
                         updateParentList.run();
                     }
