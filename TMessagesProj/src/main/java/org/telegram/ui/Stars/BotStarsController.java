@@ -173,12 +173,15 @@ public class BotStarsController {
                 ChannelMonetizationLayout.instance.reloadTransactions();
             }
         } else {
-            TLRPC.TL_payments_starsRevenueStats s = getStarsRevenueStats(dialogId, true);
-            if (s != null) {
+            final boolean ton = update.status.current_balance instanceof TL_stars.TL_starsTonAmount;
+            TLRPC.TL_payments_starsRevenueStats s = ton ? getTONRevenueStats(dialogId, true) : getStarsRevenueStats(dialogId, true);
+            if (s != null && update.status != null) {
                 s.status = update.status;
-                NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.botStarsUpdated, dialogId);
             }
-            invalidateTransactions(dialogId, true);
+            NotificationCenter.getInstance(currentAccount).postNotificationName(NotificationCenter.botStarsUpdated, dialogId);
+            if (!ton) {
+                invalidateTransactions(dialogId, true);
+            }
         }
     }
 

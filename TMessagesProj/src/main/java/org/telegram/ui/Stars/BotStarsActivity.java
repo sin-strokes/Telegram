@@ -743,14 +743,16 @@ public class BotStarsActivity extends BaseFragment implements NotificationCenter
     }
 
     private void checkStats() {
-        TLRPC.TL_payments_starsRevenueStats stats = BotStarsController.getInstance(currentAccount).getStarsRevenueStats(bot_id);
+        TLRPC.TL_payments_starsRevenueStats stats = type == TYPE_TON
+            ? BotStarsController.getInstance(currentAccount).getTONRevenueStats(bot_id, false)
+            : BotStarsController.getInstance(currentAccount).getStarsRevenueStats(bot_id);
         if (stats == lastStats && (stats == null ? null : stats.status) == lastStatsStatus) {
             return;
         }
 
         lastStats = stats;
         lastStatsStatus = stats == null ? null : stats.status;
-        if (stats != null) {
+        if (stats != null && type == TYPE_STARS) {
             rate = stats.usd_rate;
             revenueChartData = StatisticActivity.createViewData(stats.revenue_graph, getString(R.string.BotStarsChartRevenue), 2);
             if (revenueChartData != null && revenueChartData.chartData != null && revenueChartData.chartData.lines != null && !revenueChartData.chartData.lines.isEmpty() && revenueChartData.chartData.lines.get(0) != null) {
@@ -759,9 +761,9 @@ public class BotStarsActivity extends BaseFragment implements NotificationCenter
                 revenueChartData.chartData.yRate = (float) (1.0 / rate / 100.0);
             }
             setStarsBalance(stats.status.available_balance, stats.status.next_withdrawal_at);
-            if (listView != null) {
-                listView.adapter.update(true);
-            }
+        }
+        if (listView != null) {
+            listView.adapter.update(true);
         }
     }
 
